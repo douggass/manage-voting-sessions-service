@@ -1,0 +1,1 @@
+manage-voting-sessions-service
