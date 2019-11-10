@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.server.ServerResponse;
 
 import com.service.managevotingsessionsservice.document.SessionDocument;
 import com.service.managevotingsessionsservice.dto.SessionCreateDto;
@@ -31,7 +32,7 @@ public class SessionController {
 	}
 
 	@PutMapping("/v1/start-session")
-	public ResponseEntity<Void> startSession(@RequestBody SessionInformationDto sessionInformation) {
+	public Mono<ServerResponse> startSession(@RequestBody SessionInformationDto sessionInformation) {
 		return sessionService.startSession(sessionInformation);
 	}
 
