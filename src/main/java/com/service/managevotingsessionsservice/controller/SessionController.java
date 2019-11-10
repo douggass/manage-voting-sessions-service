@@ -2,8 +2,10 @@ package com.service.managevotingsessionsservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +28,11 @@ public class SessionController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Mono<SessionInformationDto> createSession(@RequestBody SessionCreateDto sessionCreate) {
 		return sessionService.createSession(sessionCreate);
+	}
+
+	@PutMapping("/v1/start-session")
+	public ResponseEntity<Void> startSession(@RequestBody SessionInformationDto sessionInformation) {
+		return sessionService.startSession(sessionInformation);
 	}
 
 	@GetMapping("/v1/session")

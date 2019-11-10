@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 
 @Document("session")
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class SessionDocument {
@@ -26,10 +26,10 @@ public class SessionDocument {
 	@Id
 	private String id;
 
-	private UUID uuid;
+	private UUID UUID;
 
-	private Date start;
-	private Date end;
+	private Instant start;
+	private Instant end;
 
 	@NotNull
 	private String subject;
