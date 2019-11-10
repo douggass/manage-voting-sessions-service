@@ -32,7 +32,7 @@ public class SessionController {
 	}
 
 	@PutMapping("/v1/start-session")
-	public Mono<ServerResponse> startSession(@RequestBody SessionInformationDto sessionInformation) {
+	public Mono<ResponseEntity<Void>> startSession(@RequestBody SessionInformationDto sessionInformation) {
 		return sessionService.startSession(sessionInformation);
 	}
 
