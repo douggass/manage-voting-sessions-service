@@ -1,6 +1,10 @@
 package com.service.managevotingsessionsservice.document;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -22,8 +26,10 @@ public class SessionDocument {
 	@Id
 	private String id;
 
-	private ZonedDateTime start;
-	private ZonedDateTime end;
+	private UUID uuid;
+
+	private Date start;
+	private Date end;
 
 	@NotNull
 	private String subject;
@@ -34,5 +40,7 @@ public class SessionDocument {
 
 	@NotNull
 	@Builder.Default
-	private ZonedDateTime createdAt = ZonedDateTime.now();
+	private Instant createdAt = OffsetDateTime.now(ZoneOffset.systemDefault()).toInstant();
+
+	private Date deletedAt;
 }
