@@ -1,6 +1,8 @@
 package com.service.managevotingsessionsservice.document;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 import javax.validation.constraints.NotNull;
 
@@ -20,7 +22,7 @@ public class VoteDocument {
 
 	@NotNull
 	@Builder.Default
-	private ZonedDateTime createdAt = ZonedDateTime.now();
+	private Instant createdAt = OffsetDateTime.now(ZoneOffset.UTC).toInstant();
 
 	private DecisionType decision;
 }

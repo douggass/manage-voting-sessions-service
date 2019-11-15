@@ -10,17 +10,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.service.managevotingsessionsservice.exception.ApiBusinessException;
 import com.service.managevotingsessionsservice.exception.ApiDataBaseException;
 import com.service.managevotingsessionsservice.exception.ApiNoDataException;
+import com.service.managevotingsessionsservice.exception.ClientException;
 
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+	
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Unexpected error")
+	@ExceptionHandler(Exception.class)
+	public void handleException(Exception e) {
+		log.error("Unexpected error: {}", e);
+	}
 
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Database Error")
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Database error")
 	@ExceptionHandler(ApiDataBaseException.class)
 	public void handleDabaseErrorException(ApiDataBaseException e) {
-		log.error("Database Error: {}", e);
+		log.error("Database error: {}", e);
+	}
+	
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Clien error")
+	@ExceptionHandler(ClientException.class)
+	public void handleDabaseErrorException(ClientException e) {
+		log.error("Database error: {}", e);
 	}
 
 	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No data")

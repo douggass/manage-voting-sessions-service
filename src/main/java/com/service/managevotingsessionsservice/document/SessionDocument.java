@@ -16,17 +16,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document("session")
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@Document("session")
 public class SessionDocument {
 
 	@Id
 	private String id;
 
-	private UUID UUID;
+	private UUID uuid;
 
 	private Instant start;
 	private Instant end;
@@ -40,7 +40,7 @@ public class SessionDocument {
 
 	@NotNull
 	@Builder.Default
-	private Instant createdAt = OffsetDateTime.now(ZoneOffset.systemDefault()).toInstant();
+	private Instant createdAt = OffsetDateTime.now(ZoneOffset.UTC).toInstant();
 
 	private Date deletedAt;
 }

@@ -12,6 +12,6 @@ import reactor.core.publisher.Mono;
 public interface UserInfoClient {
 
 	@GetMapping("/users/{identifier}")
-	Mono<UserStatusDto> getUsers(@PathVariable("identifier") String identifier);
+	Mono<UserStatusDto> users(@PathVariable("identifier") String identifier);
 
 }

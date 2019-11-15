@@ -12,5 +12,5 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface SessionRepository extends ReactiveMongoRepository<SessionDocument, String> {
 
-	public Mono<SessionDocument> findByUUID(UUID uuid);
+	public Mono<SessionDocument> findByUuid(UUID uuid);
 }
