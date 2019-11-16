@@ -55,18 +55,21 @@ public class SessionService {
 	private static final String ASSOCIATE_HAS_ALREADY_VOTE = "Associate has already vote";
 	private static final String IDENTIFIER_NOT_VALID = "Identifier not valid";
 	private static final String CLIENT_API_ERROR = "Client API error";
+	private static final String DATABASE_ERROR = "Database error";
 
 	public Mono<SessionInformationDto> createSession(final SessionCreateDto sessionCreate) {
-		return sessionRepository
-				.save(SessionDocument.builder().minutesLong(sessionCreate.getAmountMinutes()).uuid(UUID.randomUUID())
-						.subject(sessionCreate.getSubjectDescription()).build())
-				.onErrorMap(ex -> new ApiDataBaseException(ex.getMessage()))
-				.map(sessionDocument -> SessionInformationDto.builder().id(sessionDocument.getUuid()).build());
+		return sessionRepository.save(SessionDocument.builder().minutesLong(sessionCreate.getAmountMinutes())
+				.uuid(UUID.randomUUID()).subject(sessionCreate.getSubjectDescription()).build()).onErrorMap(ex -> {
+					log.info("Database error: {}", ex);
+					return new ApiDataBaseException(DATABASE_ERROR);
+				}).map(sessionDocument -> SessionInformationDto.builder().id(sessionDocument.getUuid()).build());
 	}
 
 	public Mono<ResponseEntity<Void>> startSession(final SessionInformationDto sessionInformation) {
 		return sessionRepository.findByUuid(sessionInformation.getId())
-				.switchIfEmpty(Mono.error(() -> new ApiNoDataException(NO_SESSION_FOR_THE_UUID)))
+				.switchIfEmpty(
+						Mono.error(() -> new ApiNoDataException(NO_SESSION_FOR_THE_UUID))
+				)
 				.flatMap(sessionDocument -> {
 					if (Objects.nonNull(sessionDocument.getStart())) {
 						return Mono.error(new ApiBusinessException(SESSION_HAS_ALREADY_STARTED));
@@ -79,10 +82,6 @@ public class SessionService {
 								ChronoUnit.MINUTES))
 						.build())
 				.flatMap(sessionRepository::save).map(item -> ResponseEntity.ok().build());
-	}
-
-	public Mono<UserStatusDto> userStatus(VoteDto vote) {
-		return this.users(vote);
 	}
 
 	public Mono<ResponseEntity<Void>> vote(final VoteDto vote, final UUID sessionId) {
@@ -129,7 +128,8 @@ public class SessionService {
 				}).flatMap(this.associateRepository::save);
 	}
 
-	private AssociateDocument buildAssociateVote(AssociateDocument associateDocument, VoteDocument voteDocument) {
+	private AssociateDocument buildAssociateVote(final AssociateDocument associateDocument,
+			final VoteDocument voteDocument) {
 		return associateDocument.toBuilder().votes(Optional.ofNullable(associateDocument.getVotes()).map(listVotes -> {
 			listVotes.add(voteDocument);
 			return listVotes;

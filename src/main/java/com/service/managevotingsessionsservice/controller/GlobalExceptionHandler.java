@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-	
+
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Unexpected error")
 	@ExceptionHandler(Exception.class)
 	public void handleException(Exception e) {
@@ -29,11 +29,11 @@ public class GlobalExceptionHandler {
 	public void handleDabaseErrorException(ApiDataBaseException e) {
 		log.error("Database error: {}", e);
 	}
-	
+
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Clien error")
 	@ExceptionHandler(ClientException.class)
 	public void handleDabaseErrorException(ClientException e) {
-		log.error("Database error: {}", e);
+		log.error("Clien error: {}", e);
 	}
 
 	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No data")
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
 
 	@ResponseBody
 	@ExceptionHandler(ApiBusinessException.class)
-	public ResponseEntity<?> handleBusinessException(ApiBusinessException e) {
+	public ResponseEntity<String> handleBusinessException(ApiBusinessException e) {
 		log.error("Business exception: {}", e);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 	}

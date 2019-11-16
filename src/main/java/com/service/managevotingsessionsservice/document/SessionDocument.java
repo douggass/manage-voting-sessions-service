@@ -36,7 +36,7 @@ public class SessionDocument {
 
 	@NotNull
 	@Builder.Default
-	private Integer minutesLong = 2;
+	private Integer minutesLong = 1;
 
 	@NotNull
 	@Builder.Default
