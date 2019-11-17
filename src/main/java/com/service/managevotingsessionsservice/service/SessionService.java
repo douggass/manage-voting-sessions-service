@@ -27,11 +27,15 @@ import com.service.managevotingsessionsservice.exception.ApiBusinessException;
 import com.service.managevotingsessionsservice.exception.ApiDataBaseException;
 import com.service.managevotingsessionsservice.exception.ApiNoDataException;
 import com.service.managevotingsessionsservice.exception.ClientException;
+import com.service.managevotingsessionsservice.messaging.Producer;
+import com.service.managevotingsessionsservice.messaging.SampleMessage;
+import com.service.managevotingsessionsservice.messaging.SessionMessageDto;
 import com.service.managevotingsessionsservice.repository.AssociateRepository;
 import com.service.managevotingsessionsservice.repository.SessionRepository;
 import com.service.managevotingsessionsservice.type.UserVoteType;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -46,6 +50,9 @@ public class SessionService {
 
 	@Autowired
 	private UserInfoClient userInfoClient;
+
+	@Autowired
+	private Producer producer;
 
 	private static final String NO_SESSION_FOR_THE_UUID = "No session for the UUID";
 	private static final String SESSION_HAS_ALREADY_STARTED = "Session has already started";
@@ -67,9 +74,7 @@ public class SessionService {
 
 	public Mono<ResponseEntity<Void>> startSession(final SessionInformationDto sessionInformation) {
 		return sessionRepository.findByUuid(sessionInformation.getId())
-				.switchIfEmpty(
-						Mono.error(() -> new ApiNoDataException(NO_SESSION_FOR_THE_UUID))
-				)
+				.switchIfEmpty(Mono.error(() -> new ApiNoDataException(NO_SESSION_FOR_THE_UUID)))
 				.flatMap(sessionDocument -> {
 					if (Objects.nonNull(sessionDocument.getStart())) {
 						return Mono.error(new ApiBusinessException(SESSION_HAS_ALREADY_STARTED));
@@ -84,14 +89,17 @@ public class SessionService {
 				.flatMap(sessionRepository::save).map(item -> ResponseEntity.ok().build());
 	}
 
-	public Mono<ResponseEntity<Void>> vote(final VoteDto vote, final UUID sessionId) {
+	public Mono<ResponseEntity<Void>> vote(final VoteDto vote, final UUID sessionUUID) {
 		return this.users(vote).flatMap(userStatus -> {
 			if (UserVoteType.UNABLE_TO_VOTE.getValue().equals(userStatus.getStatus().getValue())) {
 				return Mono.error(new ApiBusinessException(USER_UNABLE_TO_VOTE));
 			}
-			return validSessionDocument(sessionId);
-		}).flatMap(sessionDocument -> this.saveAssociateVote(sessionDocument, vote))
-				.map(sessionDocument -> ResponseEntity.status(HttpStatus.CREATED).build());
+			return validSessionDocument(sessionUUID);
+		}).flatMap(sessionDocument -> this.saveAssociateVote(sessionDocument, vote)).map(sessionDocument -> {
+			producer.send(SampleMessage.builder().message(SessionMessageDto.builder().uuid(sessionUUID.toString())
+					.decision(vote.getDecision().getDecisionValue()).build()).build());
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		});
 	}
 
 	private Mono<SessionDocument> validSessionDocument(final UUID sessionId) {
@@ -144,5 +152,9 @@ public class SessionService {
 			log.info("Error on get users: {}", e);
 			throw new ClientException(CLIENT_API_ERROR);
 		}
+	}
+
+	public Flux<?> getAssociates() {
+		return associateRepository.findAll();
 	}
 }
