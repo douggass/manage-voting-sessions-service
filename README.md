@@ -22,7 +22,7 @@ git clone https://github.com/douggass/manage-voting-sessions-service.git
 ```bash
 cd manage-voting-sessions-service
 mvn package
-java -jar target/webflux-demo-0.0.1-SNAPSHOT.jar
+java -jar target/manage-voting-sessions-service-1.0.0.jar
 ```
 
 Alternatively, you can run the app without packaging it using -
