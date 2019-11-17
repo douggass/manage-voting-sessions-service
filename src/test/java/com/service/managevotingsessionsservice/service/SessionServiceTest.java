@@ -31,6 +31,7 @@ import com.service.managevotingsessionsservice.exception.ApiBusinessException;
 import com.service.managevotingsessionsservice.exception.ApiDataBaseException;
 import com.service.managevotingsessionsservice.exception.ApiNoDataException;
 import com.service.managevotingsessionsservice.exception.ClientException;
+import com.service.managevotingsessionsservice.messaging.Producer;
 import com.service.managevotingsessionsservice.repository.AssociateRepository;
 import com.service.managevotingsessionsservice.repository.SessionRepository;
 import com.service.managevotingsessionsservice.type.DecisionType;
@@ -53,6 +54,9 @@ public class SessionServiceTest {
 
 	@Mock
 	private UserInfoClient userInfoClient;
+
+	@Mock
+	private Producer producer;
 
 	private static final String SUBJECT_DESCRIPTION = "Assunto da votação";
 	private static final String ANY_DOCUMENT_ID = "2";

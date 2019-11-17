@@ -15,5 +15,4 @@ public class ManageVotingSessionsServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ManageVotingSessionsServiceApplication.class, args);
 	}
-
 }

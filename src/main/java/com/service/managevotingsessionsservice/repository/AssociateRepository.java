@@ -9,5 +9,4 @@ import reactor.core.publisher.Mono;
 public interface AssociateRepository extends ReactiveMongoRepository<AssociateDocument, String> {
 
 	public Mono<AssociateDocument> findByIdentifier(final String identifier);
-
 }
