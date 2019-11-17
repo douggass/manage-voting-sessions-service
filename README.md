@@ -44,6 +44,10 @@ The application defines following REST APIs
 
 3. PUT /v1/start-session - Start a session
 
+4. GET /v1/session - List all sessions documents
+
+5. GET /v1/associate - List all associates documents
+
 ```
 
 ## Running tests
