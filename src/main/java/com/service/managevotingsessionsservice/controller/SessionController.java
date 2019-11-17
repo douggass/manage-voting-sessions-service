@@ -16,14 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.service.managevotingsessionsservice.document.AssociateDocument;
+import com.service.managevotingsessionsservice.document.SessionDocument;
 import com.service.managevotingsessionsservice.dto.SessionCreateDto;
 import com.service.managevotingsessionsservice.dto.SessionInformationDto;
 import com.service.managevotingsessionsservice.dto.VoteDto;
-import com.service.managevotingsessionsservice.messaging.Producer;
-import com.service.managevotingsessionsservice.messaging.SampleMessage;
-import com.service.managevotingsessionsservice.messaging.SessionMessageDto;
 import com.service.managevotingsessionsservice.service.SessionService;
-import com.service.managevotingsessionsservice.type.DecisionType;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -52,17 +50,16 @@ public class SessionController {
 		return sessionService.startSession(sessionInformation);
 	}
 
-	@Autowired
-	private Producer producer;
+	// TODO: refactor to return a dto
+	@GetMapping("/v1/session")
+	public Flux<SessionDocument> getAllSession() {
+		return sessionService.getAllSessions();
+	}
 
-	// TODO: delete
+	// TODO: refactor to return a dto
 	@GetMapping("/v1/associate")
-	public Flux<?> getAssociates() {
-
-		producer.send(SampleMessage.builder().id(45).message(SessionMessageDto.builder()
-				.uuid(UUID.randomUUID().toString()).decision(DecisionType.NO.getDecisionValue()).build()).build());
-
-		return sessionService.getAssociates();
+	public Flux<AssociateDocument> getAllAssociates() {
+		return sessionService.getAllAssociates();
 	}
 
 }

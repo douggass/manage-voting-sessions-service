@@ -154,7 +154,11 @@ public class SessionService {
 		}
 	}
 
-	public Flux<?> getAssociates() {
+	public Flux<AssociateDocument> getAllAssociates() {
 		return associateRepository.findAll();
+	}
+
+	public Flux<SessionDocument> getAllSessions() {
+		return sessionRepository.findAll();
 	}
 }
