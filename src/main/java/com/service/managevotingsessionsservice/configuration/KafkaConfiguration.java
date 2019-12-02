@@ -14,7 +14,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import com.service.managevotingsessionsservice.messaging.Producer;
 import com.service.managevotingsessionsservice.messaging.SessionMessageDto;
 
 @Configuration
@@ -53,11 +52,6 @@ public class KafkaConfiguration {
 	@Bean
 	public KafkaTemplate<String, SessionMessageDto> kafkaTemplate() {
 		return new KafkaTemplate<>(producerFactory());
-	}
-
-	@Bean
-	public Producer sender() {
-		return new Producer();
 	}
 
 }

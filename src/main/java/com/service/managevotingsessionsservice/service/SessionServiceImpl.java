@@ -42,7 +42,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @Primary
-public class SessionServiceImp implements SessionService {
+public class SessionServiceImpl implements SessionService {
 
 	@Autowired
 	private SessionRepository sessionRepository;
