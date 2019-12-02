@@ -1,4 +1,5 @@
 # Service to manage a voting session
+[![BCH compliance](https://bettercodehub.com/edge/badge/douggass/manage-voting-sessions-service?branch=master)](https://bettercodehub.com/)
 
 See the technical diagram of the architecture: https://www.lucidchart.com/documents/view/8e47ba52-c712-435b-857f-eb50cc42d930/0_0
 
