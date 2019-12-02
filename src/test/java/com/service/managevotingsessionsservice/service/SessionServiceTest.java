@@ -44,7 +44,7 @@ import reactor.test.StepVerifier;
 public class SessionServiceTest {
 
 	@InjectMocks
-	private SessionService sessionService;
+	private SessionServiceImp sessionService;
 
 	@Mock
 	private SessionRepository sessionRepository;
